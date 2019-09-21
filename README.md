@@ -19,6 +19,8 @@
 2. `new Promisepolyfill(() => {}).catch`
 3. `Promisepolyfill.resolve`
 4. `Promisepolyfill.reject`
+5. `Promisepolyfill.catch`
+
 
 ### Источники "вдохновения":
 

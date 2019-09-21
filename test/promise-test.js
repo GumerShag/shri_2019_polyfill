@@ -65,7 +65,7 @@ describe('Testing promise polyfill', () => {
                     return 'ошибка обработана';
                 }
             )
-            .then(function(value) {
+            .catch(function(value) {
                 assert.equal(value, 'ошибка обработана');
             });
     });
