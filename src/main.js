@@ -42,6 +42,7 @@
             let value = this.value;
             setTimeout(handler(value), 0);
         }, this);
+
         this.observers.length = 0;
     }
 
@@ -62,8 +63,6 @@
         }, this);
 
         this.observers.length = 0;
-
-        delete this.rejectCallbacks;
     }
 
     Promisepolyfill.prototype.then = function(onFulfilled, onRejected) {
@@ -123,9 +122,9 @@
         });
     };
 
-    Promisepolyfill.prototype.reject = function(reason) {
+    Promisepolyfill.prototype.reject = function(value) {
         return new Promisepolyfill(function(_, reject) {
-            reject(reason);
+            reject(value);
         });
     };
 
