@@ -1,0 +1,26 @@
+{
+  "name": "promise_polyfill",
+  "version": "1.0.0",
+  "description": "Polyfill for Promise",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test/*-test.js",
+    "fix": "prettier --config ./.prettier.config.js --write ./src/main.js",
+    "fix:test": "prettier --config ./.prettier.config.js --write ./test/promise-test.js",
+    "start": "node ./src/main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GumerShag/shri_2019_polyfill.git"
+  },
+  "author": "GumerShag",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GumerShag/shri_2019_polyfill.git/issues"
+  },
+  "homepage": "https://github.com/GumerShag/shri_2019_polyfill.git#readme",
+  "dependencies": {
+    "prettier": "^1.18.2",
+    "mocha": "^6.1.4"
+  }
+}
