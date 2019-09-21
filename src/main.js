@@ -1,7 +1,7 @@
 (function(glob) {
     const [FULFILLED, REJECTED, PENDING] = ['FULFILLED', 'REJECTED', 'PENDING'];
 
-    global.Promisepolyfill = function (resolver) {
+    glob.Promisepolyfill = function (resolver) {
         if (typeof resolver !== 'function') {
             throw TypeError('Promisepolyfill resolver is not a function');
         }
@@ -19,7 +19,7 @@
         } catch (e) {
             reject.call(this, e);
         }
-    }
+    };
 
     function resolve(value) {
         if (this.state !== PENDING) {
