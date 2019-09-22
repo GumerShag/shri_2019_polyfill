@@ -1,13 +1,9 @@
 (function(glob) {
     const [FULFILLED, REJECTED, PENDING] = ['FULFILLED', 'REJECTED', 'PENDING'];
 
-    glob.Promisepolyfill = function (resolver) {
-        if (typeof resolver !== 'function') {
+    function Promisepolyfill(func) {
+        if (typeof func !== 'function') {
             throw TypeError('Promisepolyfill resolver is not a function');
-        }
-
-        if (!(this instanceof Promise)) {
-            return new Promise(resolver);
         }
 
         this.state = PENDING;
@@ -15,19 +11,16 @@
         this.observers = [];
 
         try {
-            resolver(resolve.bind(this), reject.bind(this));
+            func(fullfill.bind(this), reject.bind(this));
         } catch (e) {
             reject.call(this, e);
         }
-    };
+    }
 
-    function resolve(value) {
-        if (this.state !== PENDING) {
-            return;
-        }
-        //No checking for thenable objects
-        if (value instanceof Promise && this.state === PENDING) {
-            value.then(resolve.bind(this), reject.bind(this));
+    function fullfill(value) {
+        //In case of function return new Promisepolyfill
+        if (value instanceof Promisepolyfill) {
+            value.then(fullfill.bind(this), reject.bind(this));
             return;
         }
 
@@ -40,29 +33,21 @@
                     ? observer.onFulfilled
                     : observer.onRejected;
             let value = this.value;
-            setTimeout(handler(value), 0);
+            handler(value);
         }, this);
 
         this.observers.length = 0;
     }
 
     function reject(value) {
-        if (this.state !== PENDING) {
-            return;
-        }
         this.value = value;
         this.state = REJECTED;
 
         this.observers.forEach(function(observer) {
-            let handler =
-                this.state === FULFILLED
-                    ? observer.onFulfilled
-                    : observer.onRejected;
+            let handler = observer.onRejected;
             let value = this.value;
-            setTimeout(handler(value), 0);
+            handler(value);
         }, this);
-
-        this.observers.length = 0;
     }
 
     Promisepolyfill.prototype.then = function(onFulfilled, onRejected) {
@@ -133,12 +118,12 @@
     };
 
     if (typeof exports === 'object' && typeof module !== 'undefined') {
-        module.exports = glob.Promisepolyfill;
+        module.exports = Promisepolyfill;
     }
-
-
-})(    typeof window !== 'undefined'
-    ? window
-    : typeof global !== 'undefined'
+})(
+    typeof window !== 'undefined'
+        ? window
+        : typeof global !== 'undefined'
         ? global
-        : this);
+        : this
+);

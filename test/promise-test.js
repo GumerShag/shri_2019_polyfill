@@ -1,9 +1,9 @@
 const assert = require('assert');
-const PromisePolifill = require('../src/main');
+const Promisepolyfill = require('../src/main');
 
 describe('Testing promise polyfill', () => {
     it('Promise resolves successfully', () => {
-        return new PromisePolifill(resolve => {
+        return new Promisepolyfill(resolve => {
             resolve(42);
         }).then(value => {
             assert.equal(value, 42);
@@ -11,7 +11,7 @@ describe('Testing promise polyfill', () => {
     });
 
     it('Promise resolves successfully and returns value', () => {
-        return new PromisePolifill(resolve => {
+        return new Promisepolyfill(resolve => {
             resolve(42);
         })
             .then(value => {
@@ -23,7 +23,7 @@ describe('Testing promise polyfill', () => {
     });
 
     it('Promise catch error', () => {
-        return new PromisePolifill(resolve => {
+        return new Promisepolyfill(resolve => {
             resolve(42);
         })
             .then(resolve => {
@@ -49,7 +49,7 @@ describe('Testing promise polyfill', () => {
             })
             .then(function(value) {
                 //console.log(value); // 43
-                return new Promise(function(resolve) {
+                return new Promisepolyfill(function(resolve) {
                     resolve(137);
                 });
             })
