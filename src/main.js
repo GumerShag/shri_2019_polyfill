@@ -1,14 +1,18 @@
-(function(glob) {
+const _ = require('lodash');
+(function(global) {
     const [FULFILLED, REJECTED, PENDING] = ['FULFILLED', 'REJECTED', 'PENDING'];
-
     function Promisepolyfill(func) {
         if (typeof func !== 'function') {
             throw TypeError('Promisepolyfill resolver is not a function');
         }
 
-        this.state = PENDING;
-        this.value = null;
-        this.observers = [];
+        if(!(func instanceof Promisepolyfill)) {
+            throw  TypeError('Promise should be created via new')
+        }
+        
+        this._state = PENDING;
+        this._value = null;
+        this._observers = [];
 
         try {
             func(fullfill.bind(this), reject.bind(this));
@@ -24,28 +28,28 @@
             return;
         }
 
-        this.value = value;
-        this.state = FULFILLED;
+        this._value = value;
+        this._state = FULFILLED;
 
-        this.observers.forEach(function(observer) {
+        this._observers.forEach(function(observer) {
             let handler =
-                this.state === FULFILLED
+                this._state === FULFILLED
                     ? observer.onFulfilled
                     : observer.onRejected;
-            let value = this.value;
+            let value = this._value;
             handler(value);
         }, this);
 
-        this.observers.length = 0;
+        this._observers.length = 0;
     }
 
     function reject(value) {
-        this.value = value;
-        this.state = REJECTED;
+        this._value = value;
+        this._state = REJECTED;
 
-        this.observers.forEach(function(observer) {
+        this._observers.forEach(function(observer) {
             let handler = observer.onRejected;
-            let value = this.value;
+            let value = this._value;
             handler(value);
         }, this);
     }
@@ -59,13 +63,13 @@
                 setTimeout(function() {
                     if (typeof onFulfilled === 'function') {
                         try {
-                            const value = onFulfilled(self.value);
+                            const value = onFulfilled(self._value);
                             resolve(value);
                         } catch (e) {
                             reject(e);
                         }
                     } else {
-                        resolve(self.value);
+                        resolve(self._value);
                     }
                 }, 0);
             };
@@ -74,23 +78,23 @@
                 setTimeout(function() {
                     if (typeof onRejected === 'function') {
                         try {
-                            const value = onRejected(self.value);
+                            const value = onRejected(self._value);
                             resolve(value);
                         } catch (e) {
                             reject(e);
                         }
                     } else {
-                        reject(self.value);
+                        reject(self._value);
                     }
                 }, 0);
             };
 
-            self.observers.push({
+            self._observers.push({
                 onFulfilled: internalOnFulfilled,
                 onRejected: internalOnReject
             });
 
-            switch (self.state) {
+            switch (self._state) {
                 case FULFILLED:
                     internalOnFulfilled(resolve, reject);
                     break;
@@ -117,8 +121,11 @@
         return this.then(null, onRejected);
     };
 
-    if (typeof exports === 'object' && typeof module !== 'undefined') {
-        module.exports = Promisepolyfill;
+    if (typeof exports !== 'undefined' && exports)
+    {
+        exports.Promise = Promisepolyfill;
+    } else {
+        global['Promise'] = Promisepolyfill;
     }
 })(
     typeof window !== 'undefined'

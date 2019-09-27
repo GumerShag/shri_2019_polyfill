@@ -20,7 +20,11 @@
   },
   "homepage": "https://github.com/GumerShag/shri_2019_polyfill.git#readme",
   "dependencies": {
-    "prettier": "^1.18.2",
-    "mocha": "^6.1.4"
+    "eslint-plugin-lodash-to-native": "git+https://github.com/GumerShag/eslint-plugin-lodash-to-native.git",
+    "mocha": "^6.1.4",
+    "prettier": "^1.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0"
   }
 }
