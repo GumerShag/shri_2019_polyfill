@@ -21,7 +21,7 @@
   "homepage": "https://github.com/GumerShag/shri_2019_polyfill.git#readme",
   "dependencies": {
     "eslint-plugin-lodash-to-native": "git+https://github.com/GumerShag/eslint-plugin-lodash-to-native.git",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.3",
     "prettier": "^1.18.2"
   },
   "devDependencies": {
